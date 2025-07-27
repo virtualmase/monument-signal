@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monument Labs - The Signal Web</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,900&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles */
+        :root {
+            --color-primary: oklch(0.7 0.25 200);
+            --color-secondary: oklch(0.85 0.25 45);
+        }
+        body {
+            font-family: 'Satoshi', sans-serif;
+            background-color: #050505;
+            color: #e5e5e5;
+            overflow-x: hidden;
+        }
+        /* Gradient text for hero and key headers */
+        .signal-gradient-text {
+            background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* Enhanced neural pattern with animated aurora background */
+        .neural-pattern {
+            position: relative;
+            background-color: #0a0a0a;
+            z-index: 1;
+        }
+        .neural-pattern::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: radial-gradient(circle at center, rgba(255,255,255,0.03) 0.5px, transparent 0.5px);
+            background-size: 30px 30px;
+            z-index: -1;
+        }
+         .neural-pattern::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(235deg, var(--color-primary), #0a0a0a, var(--color-secondary));
+            background-size: 200% 200%;
+            opacity: 0.15;
+            filter: blur(80px);
+            animation: aurora 15s ease infinite;
+            z-index: -2;
+        }
+        @keyframes aurora {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Card hover effect with enhanced shadow */
+        .card-hover-effect {
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+        .card-hover-effect:hover {
+            transform: translateY(-12px);
+            border-color: oklch(0.8 0.15 45 / 0.5);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 100px -20px oklch(0.8 0.15 45 / 0.5);
+        }
+        /* Primary button styles */
+        .btn-primary {
+            background: linear-gradient(90deg, oklch(0.6 0.15 200 / 0.9), oklch(0.8 0.15 45 / 0.9));
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px 0px oklch(0.8 0.15 45 / 0.7);
+        }
+        
+        /* Styles for scroll-triggered animations */
+        .scroll-animate {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .scroll-animate.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Header scroll effect */
+        .header-scrolled {
+            background-color: rgba(10, 10, 10, 0.7);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Mobile Nav */
+        #mobile-menu {
+            transition: transform 0.3s ease-in-out;
+        }
+        .mobile-menu-button .line1, .mobile-menu-button .line2, .mobile-menu-button .line3 {
+            transition: all 0.3s ease-in-out;
+        }
+        .mobile-menu-button.open .line1 {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+        .mobile-menu-button.open .line2 {
+            opacity: 0;
+        }
+        .mobile-menu-button.open .line3 {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
+
+        /* Footer Styles */
+        .footer-link {
+            transition: color 0.2s ease-in-out, transform 0.2s ease-in-out;
+        }
+        .footer-link:hover {
+            color: var(--color-secondary);
+            transform: translateX(4px);
+        }
+    </style>
+</head>
+<body class="neural-pattern">
+
+    <!-- Header -->
+    <header id="main-header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="flex items-center gap-2 text-2xl font-bold tracking-tighter">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-white">
+                    <path d="M12 2L2 7V17L12 22L22 17V7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                    <path d="M2 7L12 12L22 7" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                    <path d="M12 12V22" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                </svg>
+                Monument Labs
+            </a>
+            <!-- Desktop Navigation -->
+            <nav class="hidden md:flex space-x-8 text-gray-300">
+                <a href="#scenes" class="hover:text-white transition-colors">Scenes</a>
+                <a href="#vision" class="hover:text-white transition-colors">Vision</a>
+                <a href="#services" class="hover:text-white transition-colors">Services</a>
+                <a href="#about" class="hover:text-white transition-colors">About</a>
+                <a href="#contact" class="hover:text-white transition-colors">Contact</a>
+            </nav>
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-button" class="md:hidden text-white z-50 mobile-menu-button">
+                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path class="line1" d="M4 6H20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    <path class="line2" d="M4 12H20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    <path class="line3" d="M4 18H20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </button>
+        </div>
+        <!-- Mobile Navigation Menu -->
+        <div id="mobile-menu" class="md:hidden fixed top-0 left-0 w-full h-screen bg-black/95 backdrop-blur-lg flex flex-col justify-center items-center space-y-8 transform -translate-x-full">
+            <a href="#scenes" class="text-3xl font-bold mobile-link">Scenes</a>
+            <a href="#vision" class="text-3xl font-bold mobile-link">Vision</a>
+            <a href="#services" class="text-3xl font-bold mobile-link">Services</a>
+            <a href="#about" class="text-3xl font-bold mobile-link">About</a>
+            <a href="#contact" class="text-3xl font-bold mobile-link">Contact</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="min-h-screen flex items-center justify-center text-center pt-20 relative">
+            <div class="container mx-auto px-6 z-10">
+                <h2 class="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-tight scroll-animate">
+                    <span class="signal-gradient-text">The Signal Web:</span><br>Architecting the Future Beyond Search.
+                </h2>
+                <p class="mt-6 text-lg md:text-xl max-w-3xl mx-auto text-gray-300 scroll-animate" style="transition-delay: 150ms;">
+                    We build bespoke AI workflows and integrate Business Intelligence to navigate the post-search era, ensuring your organization is future-ready.
+                </p>
+                <div class="mt-10 scroll-animate" style="transition-delay: 300ms;">
+                    <a href="#contact" class="btn-primary text-white font-bold py-4 px-8 rounded-full text-lg">
+                        Start Quantum Audit
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- All other sections remain the same as the remastered version -->
+        <!-- Scenes Section -->
+        <section id="scenes" class="py-24">
+            <div class="container mx-auto px-6">
+                <h3 class="text-4xl md:text-5xl font-bold text-center mb-16 scroll-animate">Rise of the Signal Web</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Scene 1 -->
+                    <div class="bg-black/20 p-6 rounded-2xl border border-white/10 card-hover-effect scroll-animate">
+                        <img src="https://placehold.co/600x400/0a0a0a/e5e5e5?text=Neural+Earthscape" alt="Rise of the Signal Web visual" class="rounded-lg mb-4 w-full h-auto" onerror="this.onerror=null;this.src='https://placehold.co/600x400/0a0a0a/e5e5e5?text=Image+Not+Found';">
+                        <h4 class="text-2xl font-bold mb-2">Death of Search</h4>
+                        <p class="text-gray-400">Exploring the paradigm shift from keyword queries to predictive, context-aware intelligence grids.</p>
+                    </div>
+                    <!-- Scene 2 -->
+                    <div class="bg-black/20 p-6 rounded-2xl border border-white/10 card-hover-effect scroll-animate" style="transition-delay: 100ms;">
+                         <img src="http://googleusercontent.com/file_content/0" alt="AI Marketing Attribution Analytics" class="rounded-lg mb-4 w-full h-auto" onerror="this.onerror=null;this.src='https://placehold.co/600x400/0a0a0a/e5e5e5?text=Image+Not+Found';">
+                        <h4 class="text-2xl font-bold mb-2">Planetary Intelligence Grid</h4>
+                        <p class="text-gray-400">Demonstrating our integrated BI dashboards for global climate and infrastructure monitoring.</p>
+                    </div>
+                    <!-- Scene 3 -->
+                    <div class="bg-black/20 p-6 rounded-2xl border border-white/10 card-hover-effect scroll-animate" style="transition-delay: 200ms;">
+                        <img src="https://placehold.co/600x400/0a0a0a/e5e5e5?text=Workflow+Demo" alt="Embedded AI Infrastructure visual" class="rounded-lg mb-4 w-full h-auto" onerror="this.onerror=null;this.src='https://placehold.co/600x400/0a0a0a/e5e5e5?text=Image+Not+Found';">
+                        <h4 class="text-2xl font-bold mb-2">Embedded AI Infrastructure</h4>
+                        <p class="text-gray-400">Showcasing custom AI workflows that create deep, strategic dependency and competitive advantage.</p>
+                    </div>
+                     <!-- Scene 4 -->
+                    <div class="bg-black/20 p-6 rounded-2xl border border-white/10 card-hover-effect scroll-animate">
+                        <img src="https://placehold.co/600x400/0a0a0a/e5e5e5?text=GSO+in+Action" alt="Generative Search Optimization visual" class="rounded-lg mb-4 w-full h-auto" onerror="this.onerror=null;this.src='https://placehold.co/600x400/0a0a0a/e5e5e5?text=Image+Not+Found';">
+                        <h4 class="text-2xl font-bold mb-2">Generative Search Optimization</h4>
+                        <p class="text-gray-400">Mastering visibility in AI-driven answer engines and generative experiences.</p>
+                    </div>
+                    <!-- Scene 5 -->
+                    <div class="bg-black/20 p-6 rounded-2xl border border-white/10 card-hover-effect scroll-animate" style="transition-delay: 100ms;">
+                        <img src="https://placehold.co/600x400/0a0a0a/e5e5e5?text=Semantic+Web" alt="Semantic Web visual" class="rounded-lg mb-4 w-full h-auto" onerror="this.onerror=null;this.src='https://placehold.co/600x400/0a0a0a/e5e5e5?text=Image+Not+Found';">
+                        <h4 class="text-2xl font-bold mb-2">Semantic Web Mastery</h4>
+                        <p class="text-gray-400">Building enterprise-grade knowledge graphs that form the bedrock of future AI interaction.</p>
+                    </div>
+                    <!-- Scene 6 -->
+                    <div class="bg-black/20 p-6 rounded-2xl border border-white/10 card-hover-effect scroll-animate" style="transition-delay: 200ms;">
+                        <img src="https://placehold.co/600x400/0a0a0a/e5e5e5?text=Client-Side+AI" alt="Client-Side AI visual" class="rounded-lg mb-4 w-full h-auto" onerror="this.onerror=null;this.src='https://placehold.co/600x400/0a0a0a/e5e5e5?text=Image+Not+Found';">
+                        <h4 class="text-2xl font-bold mb-2">Client-Side AI Integration</h4>
+                        <p class="text-gray-400">Deploying ONNX.js and TensorFlow.js models for real-time infrastructure analysis.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Vision Section -->
+        <section id="vision" class="py-24 bg-black/20">
+            <div class="container mx-auto px-6">
+                <h3 class="text-4xl md:text-5xl font-bold text-center mb-16 scroll-animate">Our Vision</h3>
+                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                    <!-- Pillar 1 -->
+                    <div class="p-8 rounded-2xl card-hover-effect border border-white/10 scroll-animate">
+                        <h4 class="text-2xl font-bold mb-3 signal-gradient-text">Future Ready</h4>
+                        <p class="text-gray-400">We architect schema-native, future-proof systems that anticipate change, not just react to it.</p>
+                    </div>
+                    <!-- Pillar 2 -->
+                    <div class="p-8 rounded-2xl card-hover-effect border border-white/10 scroll-animate" style="transition-delay: 150ms;">
+                        <h4 class="text-2xl font-bold mb-3 signal-gradient-text">Adaptive Systems</h4>
+                        <p class="text-gray-400">Our AI workflows are dynamic, learning from real-time data to optimize outcomes continuously.</p>
+                    </div>
+                    <!-- Pillar 3 -->
+                    <div class="p-8 rounded-2xl card-hover-effect border border-white/10 scroll-animate" style="transition-delay: 300ms;">
+                        <h4 class="text-2xl font-bold mb-3 signal-gradient-text">Quantum Lab</h4>
+                        <p class="text-gray-400">Pioneering post-quantum solutions and infrastructure analysis for unparalleled security and insight.</p>
+                    </div>
+                </div>
+                <div class="mt-16 text-center max-w-3xl mx-auto scroll-animate">
+                    <p class="text-xl italic text-gray-300">"The best way to predict the future is to invent it. We're not just predicting; we're building the underlying architecture."</p>
+                    <p class="mt-4 text-gray-500">- Monument Labs Research</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section id="services" class="py-24">
+             <div class="container mx-auto px-6">
+                <h3 class="text-4xl md:text-5xl font-bold text-center mb-16 scroll-animate">Core Offerings</h3>
+                <div class="max-w-4xl mx-auto">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="bg-black/20 p-6 rounded-lg border border-white/10 scroll-animate">
+                            <h4 class="text-xl font-bold mb-2">Generative Search Optimization (GSO)</h4>
+                            <p class="text-gray-400">Optimize your digital presence for AI-driven discovery and entity-based search.</p>
+                        </div>
+                        <div class="bg-black/20 p-6 rounded-lg border border-white/10 scroll-animate" style="transition-delay: 100ms;">
+                            <h4 class="text-xl font-bold mb-2">Semantic Strategy</h4>
+                            <p class="text-gray-400">Develop a knowledge graph for your business to dominate the semantic web.</p>
+                        </div>
+                         <div class="bg-black/20 p-6 rounded-lg border border-white/10 scroll-animate">
+                            <h4 class="text-xl font-bold mb-2">Experience Design</h4>
+                            <p class="text-gray-400">Craft intuitive, AI-powered user experiences that drive engagement and loyalty.</p>
+                        </div>
+                        <div class="bg-black/20 p-6 rounded-lg border border-white/10 scroll-animate" style="transition-delay: 100ms;">
+                            <h4 class="text-xl font-bold mb-2">Insight Layer</h4>
+                            <p class="text-gray-400">Integrate real-time BI and predictive analytics directly into your operations.</p>
+                        </div>
+                         <div class="bg-black/20 p-6 rounded-lg border border-white/10 md:col-span-2 scroll-animate">
+                            <h4 class="text-xl font-bold mb-2">Visual Systems & Workflow Customization</h4>
+                            <p class="text-gray-400">Bespoke AI workflows and visual intelligence systems for climate-tech and smart infrastructure.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="py-24 bg-black/20">
+            <div class="container mx-auto px-6 text-center">
+                <h3 class="text-4xl md:text-5xl font-bold mb-4 scroll-animate">We are a lab, not an agency.</h3>
+                <p class="max-w-3xl mx-auto text-lg text-gray-300 scroll-animate" style="transition-delay: 150ms;">
+                    Born in Monument, Colorado, our focus is on fundamental research and development of the Signal Web. We partner with visionary $10M+ climate-tech clients to build the future of intelligent infrastructure. Our principles are simple: schema-native and future-proof.
+                </p>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-24">
+            <div class="container mx-auto px-6">
+                <h3 class="text-4xl md:text-5xl font-bold text-center mb-16 scroll-animate">Engage with Us</h3>
+                <div class="max-w-lg mx-auto bg-black/20 p-8 rounded-2xl border border-white/10 scroll-animate">
+                    <h4 class="text-2xl font-bold mb-6 text-center">Executive Search & Workflow Access</h4>
+                    <form>
+                        <div class="mb-4">
+                            <label for="name" class="block text-sm font-medium text-gray-400 mb-2">Full Name</label>
+                            <input type="text" id="name" name="name" class="w-full bg-gray-900/50 border border-white/20 rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+                        </div>
+                        <div class="mb-4">
+                            <label for="email" class="block text-sm font-medium text-gray-400 mb-2">Email Address</label>
+                            <input type="email" id="email" name="email" class="w-full bg-gray-900/50 border border-white/20 rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+                        </div>
+                         <div class="mb-6">
+                            <label for="interest" class="block text-sm font-medium text-gray-400 mb-2">I'm interested in...</label>
+                            <select id="interest" name="interest" class="w-full bg-gray-900/50 border border-white/20 rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all appearance-none bg-no-repeat bg-right pr-8" style="background-image: url('data:image/svg+xml;charset=utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2020%2020%22%20fill%3D%22%23a0aec0%22%3E%3Cpath%20fill-rule%3D%22evenodd%22%20d%3D%22M5.293%207.293a1%201%200%20011.414%200L10%2010.586l3.293-3.293a1%201%200%20111.414%201.414l-4%204a1%201%200%2001-1.414%200l-4-4a1%201%200%20010-1.414z%22%20clip-rule%3D%22evenodd%22%20%2F%3E%3C%2Fsvg%3E');">
+                                <option>Quantum Audit</option>
+                                <option>Executive Search</option>
+                                <option>Workflow Control Access</option>
+                                <option>On-site Engineering Proposal</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="w-full btn-primary text-white font-bold py-3 px-6 rounded-lg">Submit Inquiry</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-black/50 border-t border-white/10 pt-16 pb-8">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+                <!-- Column 1: Logo & Mission -->
+                <div class="space-y-4">
+                    <a href="#" class="flex items-center gap-2 text-2xl font-bold tracking-tighter">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-white">
+                            <path d="M12 2L2 7V17L12 22L22 17V7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                            <path d="M2 7L12 12L22 7" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                            <path d="M12 12V22" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                        </svg>
+                        Monument Labs
+                    </a>
+                    <p class="text-gray-400">Architecting the future of global climate resilience and smart infrastructure through the Signal Web.</p>
+                </div>
+
+                <!-- Column 2: Explore -->
+                <div class="space-y-4">
+                    <h4 class="font-bold text-lg text-white">Explore</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#scenes" class="footer-link">Scenes</a></li>
+                        <li><a href="#vision" class="footer-link">Vision</a></li>
+                        <li><a href="#services" class="footer-link">Services</a></li>
+                        <li><a href="#about" class="footer-link">About Us</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 3: Engage -->
+                <div class="space-y-4">
+                    <h4 class="font-bold text-lg text-white">Engage</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#contact" class="footer-link">Contact & Audits</a></li>
+                        <li><a href="#" class="footer-link">#PostSearchEra</a></li>
+                        <li><a href="#" class="footer-link">@MonumentLabs</a></li>
+                        <li><a href="mailto:support@monumentlabs.ai" class="footer-link">support@monumentlabs.ai</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 4: Stay Updated -->
+                <div class="space-y-4">
+                    <h4 class="font-bold text-lg text-white">Stay Updated</h4>
+                    <p class="text-gray-400">Subscribe for access to workflow controls and research.</p>
+                    <form class="flex">
+                        <input type="email" placeholder="your.email@example.com" class="w-full bg-gray-900/50 border border-white/20 rounded-l-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+                        <button type="submit" class="bg-white/90 text-black font-bold py-2 px-4 rounded-r-lg hover:bg-white transition-colors">Go</button>
+                    </form>
+                </div>
+            </div>
+            <div class="border-t border-white/10 pt-8 text-center text-gray-500">
+                <p>&copy; 2025 Monument Labs, Inc. All rights reserved. | Denver, CO</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- Header Scroll Effect ---
+            const header = document.getElementById('main-header');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    header.classList.add('header-scrolled');
+                } else {
+                    header.classList.remove('header-scrolled');
+                }
+            });
+
+            // --- Mobile Menu ---
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileLinks = document.querySelectorAll('.mobile-link');
+
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('-translate-x-full');
+                mobileMenuButton.classList.toggle('open');
+            });
+            
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('-translate-x-full');
+                    mobileMenuButton.classList.remove('open');
+                });
+            });
+
+            // --- Scroll-triggered Animations ---
+            const animatedElements = document.querySelectorAll('.scroll-animate');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                    }
+                });
+            }, {
+                threshold: 0.1 
+            });
+
+            animatedElements.forEach(el => {
+                observer.observe(el);
+            });
+        });
+    </script>
+</body>
+</html>
